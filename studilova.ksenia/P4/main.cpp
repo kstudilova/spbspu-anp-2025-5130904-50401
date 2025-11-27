@@ -2,9 +2,18 @@
 
 namespace studilova 
 {
-
+    size_t string_length(const char* str);
 }
 
+size_t studilova::string_length(const char* str)
+{
+    size_t len = 0;
+    for (size_t i = 0; str[i] != '\0'; ++i)
+    {
+        len++;
+    }
+    return len;
+}
 
 int main()
 {
@@ -23,4 +32,6 @@ int main()
         std::cerr << "Memory allocation error\n";
         return 1;
     }
+
+    size_t input_len = studilova::string_length(input_string);
 }
