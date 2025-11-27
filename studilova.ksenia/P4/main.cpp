@@ -17,4 +17,10 @@ int main()
         delete[] input_string;
         return 1;
     }
+
+    if (!input_string)
+    {
+        std::cerr << "Memory allocation error\n";
+        return 1;
+    }
 }
