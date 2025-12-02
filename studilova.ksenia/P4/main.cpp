@@ -172,13 +172,17 @@ int main()
 
   size_t input_len = studilova::stringLength(input_string);
 
-  result1 = new char[input_len + 1];
-  result2 = new char[input_len + 1];
-
+  try{
+    result1 = new char[input_len + 1];
+    result2 = new char[input_len + 1];
+  } catch (...) {
+    std::cerr << "Memory allocation error" << "\n";
+    delete[] input_string;
+    return 1;
+  }
+  
   studilova::excludeCharsFromSecond(input_string, result1, input_len + 1);
   studilova::removeVowels(input_string, result2, input_len + 1);
-
-
 
   std::cout << result1 << "\n";
   std::cout << result2 << "\n";
