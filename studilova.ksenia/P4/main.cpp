@@ -5,7 +5,7 @@ namespace studilova
 {
   char* readLine();
   size_t stringLength(const char* str);
-  size_t extractCommonChars(const char* input, char* output, size_t output_size);
+  void excludeCharsFromSecond(const char* input, char* output, size_t output_size);
   size_t removeVowels(const char* input, char* output, size_t output_size);
 }
 
@@ -78,9 +78,38 @@ size_t studilova::stringLength(const char* str)
   return len;
 }
 
-size_t studilova::extractCommonChars(const char* input, char* output, size_t output_size)
+void studilova::excludeCharsFromSecond(const char* input, char* output, size_t output_size)
 {
+  if (output_size == 0)
+  {
+    return;
+  }
 
+  const char* second_string = "abc";
+  size_t j = 0;
+  for (size_t i = 0; input[i] != '\0'; ++i)
+  {
+    if (j >= output_size - 1)
+    {
+      break;
+    }
+
+    bool exclude = false;
+    for (size_t k = 0; second_string[k] != '\0'; ++k)
+    {
+      if (input[i] == second_string[k])
+      {
+        exclude = true;
+        break;
+      }
+    }
+    
+    if (!exclude){
+      output[j] = input[i];
+      j++;
+    }
+  }
+  output[j] = '\0';
 }
 
 size_t studilova::removeVowels(const char* input, char* output, size_t output_size)
@@ -107,7 +136,7 @@ int main()
   result1 = new char[input_len + 1];
   result2 = new char[input_len + 1];
 
-  studilova::extractCommonChars(input_string, result1, input_len + 1);
+  studilova::excludeCharsFromSecond(input_string, result1, input_len + 1);
   studilova::removeVowels(input_string, result2, input_len + 1);
 
 
