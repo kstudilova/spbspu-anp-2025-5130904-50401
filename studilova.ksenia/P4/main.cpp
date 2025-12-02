@@ -186,4 +186,10 @@ int main()
 
   std::cout << result1 << "\n";
   std::cout << result2 << "\n";
+
+  delete[] input_string;
+  delete[] result1;
+  delete[] result2;
+
+  return 0;
 }
