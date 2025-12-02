@@ -1,10 +1,12 @@
 #include <iostream>
 #include <cstddef>
+#include <cctype>
 
 namespace studilova 
 {
   char* readLine();
   size_t stringLength(const char* str);
+  int isVowel(char c);
   void excludeCharsFromSecond(const char* input, char* output, size_t output_size);
   void removeVowels(const char* input, char* output, size_t output_size);
 }
@@ -76,6 +78,24 @@ size_t studilova::stringLength(const char* str)
     len++;
   }
   return len;
+}
+
+int studilova::isVowel(char c)
+{
+  if (!std::isalpha(static_cast<unsigned char>(c)))
+  {
+    return 0;
+  }
+
+  char lower = std::tolower(static_cast<unsigned char>(c));
+  if (lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u' || lower == 'y')
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 void studilova::excludeCharsFromSecond(const char* input, char* output, size_t output_size)
