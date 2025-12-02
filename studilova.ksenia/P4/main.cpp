@@ -6,7 +6,7 @@ namespace studilova
   char* readLine();
   size_t stringLength(const char* str);
   void excludeCharsFromSecond(const char* input, char* output, size_t output_size);
-  size_t removeVowels(const char* input, char* output, size_t output_size);
+  void removeVowels(const char* input, char* output, size_t output_size);
 }
 
 char* studilova::readLine()
@@ -112,9 +112,28 @@ void studilova::excludeCharsFromSecond(const char* input, char* output, size_t o
   output[j] = '\0';
 }
 
-size_t studilova::removeVowels(const char* input, char* output, size_t output_size)
+void studilova::removeVowels(const char* input, char* output, size_t output_size)
 {
+  if (output_size == 0)
+  {
+    return;
+  }
 
+  size_t j = 0;
+  for (size_t i = 0; input[i] != '\0'; ++i)
+  {
+    if (j >= output_size - 1)
+    {
+      break;
+    }
+
+    if (!studilova::isVowel((input[i])))
+    {
+      output[j] = input[i];
+      j++;
+    }
+  }
+  output[j] = '\0';
 }
 
 int main()
