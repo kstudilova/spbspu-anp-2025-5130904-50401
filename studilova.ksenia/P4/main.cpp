@@ -1,17 +1,18 @@
 #include <iostream>
 #include <cstddef>
 #include <cctype>
+#include <iomanip>
 
-namespace studilova 
+namespace studilova
 {
-  char* readLine();
+  char* getLine();
   size_t stringLength(const char* str);
   int isVowel(char c);
   void excludeCharsFromSecond(const char* input, char* output, size_t output_size);
   void removeVowels(const char* input, char* output, size_t output_size);
 }
 
-char* studilova::readLine()
+char* studilova::getLine()
 {
   const size_t first_capacity = 32;
   size_t capacity = first_capacity;
@@ -24,8 +25,14 @@ char* studilova::readLine()
     return nullptr;
   }
 
+  bool is_skipws = std::cin.flags() & std::ios_base::skipws;
+  if (is_skipws)
+  {
+    std::cin >> std::noskipws;
+  }
+
   char ch;
-  while (std::cin.get(ch) && ch != '\n')
+  while (std::cin >> ch && ch != '\n')
   {
     if (length + 1 >= capacity)
     {
@@ -34,6 +41,10 @@ char* studilova::readLine()
       try {
         new_buffer = new char[new_capacity];
       } catch (...) {
+        if (is_skipws)
+        {
+          std::cin >> std::skipws;
+        }
         delete[] buffer;
         return nullptr;
       }
@@ -50,6 +61,11 @@ char* studilova::readLine()
 
     buffer[length] = ch;
     length++;
+  }
+
+  if (is_skipws)
+  {
+    std::cin >> std::skipws;
   }
 
   if (length == 0)
@@ -82,12 +98,12 @@ size_t studilova::stringLength(const char* str)
 
 int studilova::isVowel(char c)
 {
-  if (!std::isalpha(static_cast<unsigned char>(c)))
+  if (!std::isalpha(c))
   {
     return 0;
   }
 
-  char lower = std::tolower(static_cast<unsigned char>(c));
+  char lower = std::tolower(c);
   if (lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u' || lower == 'y')
   {
     return 1;
@@ -123,7 +139,7 @@ void studilova::excludeCharsFromSecond(const char* input, char* output, size_t o
         break;
       }
     }
-    
+
     if (!exclude){
       output[j] = input[i];
       j++;
@@ -162,7 +178,7 @@ int main()
   char* result1 = nullptr;
   char* result2 = nullptr;
 
-  input_string = studilova::readLine();
+  input_string = studilova::getLine();
 
   if (!input_string)
   {
@@ -180,7 +196,7 @@ int main()
     delete[] input_string;
     return 1;
   }
-  
+
   studilova::excludeCharsFromSecond(input_string, result1, input_len + 1);
   studilova::removeVowels(input_string, result2, input_len + 1);
 
