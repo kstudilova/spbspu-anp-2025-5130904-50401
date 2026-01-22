@@ -5,13 +5,12 @@
 
 namespace studilova
 {
-  int saddlePoints(int* matrix, size_t rows, size_t cols);
-  int maxDiagonalSum(int* matrix, size_t rows, size_t cols);
-  int* createMatrix(int mode, size_t rows, size_t cols);
+  int saddlePoints(const int* matrix, size_t rows, size_t cols);
+  int maxDiagonalSum(const int* matrix, size_t rows, size_t cols);
   std::ifstream& readMatrix(std::ifstream& input, int* matrix, size_t rows, size_t cols);
 }
 
-int studilova::saddlePoints(int* matrix, size_t rows, size_t cols)
+int studilova::saddlePoints(const int* matrix, size_t rows, size_t cols)
 {
   int count = 0;
 
@@ -51,7 +50,7 @@ int studilova::saddlePoints(int* matrix, size_t rows, size_t cols)
   return count;
 }
 
-int studilova::maxDiagonalSum(int* matrix, size_t rows, size_t cols)
+int studilova::maxDiagonalSum(const int* matrix, size_t rows, size_t cols)
 {
   int maxSum = 0;
 
@@ -92,18 +91,6 @@ int studilova::maxDiagonalSum(int* matrix, size_t rows, size_t cols)
   return maxSum;
 }
 
-int* studilova::createMatrix(int mode, size_t rows, size_t cols)
-{
-  if (mode == 1)
-  {
-    return nullptr;
-  }
-  else
-  {
-    return static_cast< int* >(malloc(rows * cols * sizeof(int)));
-  }
-}
-
 std::ifstream& studilova::readMatrix(std::ifstream& input, int* matrix, size_t rows, size_t cols)
 {
   for (size_t i = 0; i < rows * cols; i++)
@@ -125,12 +112,7 @@ int main(int argc, char* argv[])
     std::cerr << "Too many arguments\n";
     return 1;
   }
-  else if (!std::isdigit(argv[1][0]) || argv[1][1] != '\0')
-  {
-    std::cerr << "First parameter is not a number\n";
-    return 1;
-  }
-  else if (argv[1][0] != '1' && argv[1][0] != '2')
+  else if ((argv[1][0] != '1' && argv[1][0] != '2') || argv[1][1] != '\0')
   {
     std::cerr << "First parameter is out of range\n";
     return 1;
@@ -145,14 +127,13 @@ int main(int argc, char* argv[])
   std::ifstream inputFile(inputFilename);
   if (!inputFile.is_open())
   {
-    std::cerr << "Can not open input file\n";
+    std::cerr << "Cannot open input file\n";
     return 2;
   }
 
   size_t rows = 0;
   size_t cols = 0;
   inputFile >> rows >> cols;
-
 
   if (inputFile.fail())
   {
@@ -167,23 +148,29 @@ int main(int argc, char* argv[])
     return 0;
   }
 
+  if (rows * cols > 10000)
+  {
+    std::cerr << "Matrix is too big\n";
+    return 2;
+  }
+
   int* matrix = nullptr;
   int stackMemory[10000];
 
   if (mode == 1)
   {
-    if (rows * cols > 10000)
-    {
-      std::cerr << "Matrix too big\n";
-      return 2;
-    }
     matrix = stackMemory;
   }
   else
   {
-    matrix = studilova::createMatrix(mode, rows, cols);
+    matrix = static_cast< int* >(malloc(rows * cols * sizeof(int)));
+    if (matrix == nullptr)
+    {
+      std::cerr << "Memory allocation failed\n";
+      return 2;
+    }
   }
-  
+
   if (!studilova::readMatrix(inputFile, matrix, rows, cols))
   {
     std::cerr << "Invalid matrix data\n";
